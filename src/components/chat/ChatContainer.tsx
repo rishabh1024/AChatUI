@@ -187,4 +187,4 @@ const ChatContainer: React.FC = () => {
     </div>  );
 };
 
-export { ChatContainer as default };
+export default ChatContainer;

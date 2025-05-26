@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChatContainer } from './components/chat';
+import ChatContainer from './components/chat/ChatContainer';
 import { Sidebar, ErrorBoundary } from './components/layout';
 
 function App() {
