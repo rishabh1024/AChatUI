@@ -17,11 +17,10 @@ const ConnectionStatus: React.FC = () => {
       });
       
       if (response.ok) {
-        setStatus('connected');
-      } else {
+        setStatus('connected');      } else {
         setStatus('disconnected');
       }
-    } catch (error) {
+    } catch {
       setStatus('disconnected');
     } finally {
       setLastChecked(new Date());

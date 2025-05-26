@@ -156,39 +156,36 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   ];
 
   return (
-    <>
-      {/* Overlay for mobile */}
+    <>      {/* Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40" 
           onClick={onToggle}
         />
       )}
-      
-      {/* Sidebar */}
+        {/* Sidebar */}
       <div className={`fixed left-0 top-0 h-full bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out z-50 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
-      } lg:translate-x-0 lg:static lg:h-screen`} style={{ width: '320px' }}>
-        
-        {/* Header */}
+      }`} style={{ width: '320px' }}>
+          {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-900">AI Assistant</h2>
           <button
             onClick={onToggle}
-            className="p-1 rounded-md hover:bg-gray-100 lg:hidden"
+            className="p-1 rounded-md hover:bg-gray-100 transition-colors"
+            title="Close sidebar"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-gray-200">
-          {tabs.map((tab) => (
+        <div className="flex border-b border-gray-200">          {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'history' | 'prompts' | 'documents' | 'tools')}
               className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
                 activeTab === tab.id
                   ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
