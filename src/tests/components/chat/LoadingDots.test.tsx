@@ -1,4 +1,4 @@
-﻿import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '../../../test-utils/testing-library-utils'
 import LoadingDots from '../../../components/chat/LoadingDots'
 
