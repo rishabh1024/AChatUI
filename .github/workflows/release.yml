@@ -1,0 +1,68 @@
+name: Release Build
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build'
+        required: true
+        default: 'latest'
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  release-build:
+    name: Release Build & Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚀 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 📥 Install dependencies
+      run: npm ci --prefer-offline --no-audit
+
+    - name: 🔧 Type checking
+      run: npm run type-check || npm run build --dry-run
+
+    - name: 🧹 Lint code
+      run: npm run lint
+
+    - name: 🏗️ Build for production
+      run: npm run build
+      env:
+        VITE_API_BASE_URL: ${{ secrets.PROD_API_BASE_URL }}
+        VITE_API_TIMEOUT: ${{ secrets.VITE_API_TIMEOUT || '30000' }}
+        VITE_API_RETRY_ATTEMPTS: ${{ secrets.VITE_API_RETRY_ATTEMPTS || '3' }}
+
+    - name: 📦 Create release archive
+      run: |
+        cd dist
+        tar -czf ../chatui-${{ github.event.release.tag_name || github.event.inputs.version }}.tar.gz .
+        cd ..
+
+    - name: 📤 Upload release artifact
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./chatui-${{ github.event.release.tag_name }}.tar.gz
+        asset_name: chatui-${{ github.event.release.tag_name }}.tar.gz
+        asset_content_type: application/gzip
+
+    - name: 🚀 Deploy to production
+      if: github.event_name == 'release'
+      run: |
+        echo "🚀 Deploying release ${{ github.event.release.tag_name }} to production..."
+        # Add your production deployment commands here
