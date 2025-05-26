@@ -16,7 +16,7 @@ export const validateMessage = (message: string): { isValid: boolean; error?: st
 };
 
 export const formatTimestamp = (date: Date): string => {
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 };
 
 export const debounce = <T extends (...args: unknown[]) => unknown>(
