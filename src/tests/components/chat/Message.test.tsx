@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '../../../test-utils/testing-library-utils'
 import MessageComponent from '../../../components/chat/Message'
-import type { Message } from '../../types/chat'
+import type { Message } from '../../../types/chat'
 
 describe('Message Component', () => {
   const mockUserMessage: Message = {
